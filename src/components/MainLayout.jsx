@@ -1,48 +1,44 @@
-import { Link, Routes, Route } from 'react-router-dom';
-import StartsWithPage from '../pages/options/StartsWithPage';
-import EndsWithPage from '../pages/options/EndsWithPage';
-import ContainsPage from '../pages/options/ContainsPage';
+// MainLayout.jsx
+import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import StartsWithPage from "../pages/options/StartsWithPage";
+import EndsWithPage from "../pages/options/EndsWithPage";
+import ContainsPage from "../pages/options/ContainsPage";
+import ParityDFAVisualizer from "../pages/options/ParityDFAVisualizer";
+import Sidebar from "./Sidebar";
 
 const MainLayout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
   return (
-    <div className="flex h-screen">
+    <div className="font-serif flex h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white p-6">
-        <h2 className="text-2xl font-bold mb-6">String Options</h2>
-        <ul className="space-y-4">
-          <li>
-            <Link 
-              to="/app/starts-with" 
-              className="hover:text-gray-300 transition-colors"
-            >
-              Starts With...
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="/app/ends-with" 
-              className="hover:text-gray-300 transition-colors"
-            >
-              Ends With...
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="/app/contains" 
-              className="hover:text-gray-300 transition-colors"
-            >
-              Contains...
-            </Link>
-          </li>
-        </ul>
-      </aside>
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main content area */}
-      <main className="flex-1 p-8 bg-gray-50 overflow-auto">
+      <main className="flex-1 p-8 bg-gray-50 overflow-auto relative">
+        {/* Toggle button visible only on mobile */}
+        <button
+          className="md:hidden absolute top-4 left-4 z-50"
+          onClick={toggleSidebar}
+          aria-label="Toggle Sidebar"
+        >
+          <img
+            src={sidebarOpen ? "/icons/close.png" : "/icons/menu.png"}
+            alt={sidebarOpen ? "Close menu" : "Open menu"}
+            className="w-6 h-6"
+          />
+        </button>
+
         <Routes>
           <Route path="starts-with" element={<StartsWithPage />} />
           <Route path="ends-with" element={<EndsWithPage />} />
           <Route path="contains" element={<ContainsPage />} />
+          <Route path="even-odd" element={<ParityDFAVisualizer />} />
         </Routes>
       </main>
     </div>

@@ -1,5 +1,7 @@
+// EndsWithPage.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { Network } from "vis-network/standalone";
+import PatternInput from "./PatternInput"; // Adjust the import path as needed
 
 const EndsWithPage = () => {
   const containerRef = useRef(null);
@@ -8,7 +10,6 @@ const EndsWithPage = () => {
   const generateDFA = (pattern) => {
     const nodes = [];
     const edges = [];
-    // let stateCounter = 0;
 
     // Create states for the pattern
     for (let i = 0; i <= pattern.length; i++) {
@@ -19,16 +20,11 @@ const EndsWithPage = () => {
       });
     }
 
-    // Create a trap state
-    // const trapState = "X";
-    // nodes.push({ id: trapState, label: "qX", color: "lightcoral" });
-
     // Transition logic for "ends with"
     for (let i = 0; i <= pattern.length; i++) {
       const currentPrefix = pattern.slice(0, i);
       ["0", "1"].forEach((char) => {
         const nextPrefix = currentPrefix + char;
-
         // Determine the longest suffix of nextPrefix that is also a prefix of pattern
         let k = Math.min(nextPrefix.length, pattern.length);
         while (k > 0 && nextPrefix.slice(-k) !== pattern.slice(0, k)) {
@@ -63,30 +59,22 @@ const EndsWithPage = () => {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold text-center mb-6">
+        <h1 className="text-xl md:text-3xl font-bold text-center mb-6">
           DFA Visualizer: Ends With
         </h1>
-        <div className="flex items-center space-x-4 border border-gray-300">
-          <label htmlFor="endsWithInput" className="whitespace-nowrap ml-4">
-            Ends with
-          </label>
-          <input
-            id="endsWithInput"
-            type="text"
-            value={inputString}
-            onChange={(e) => setInputString(e.target.value)}
-            placeholder="Enter pattern (ends with...)"
-            className="w-full px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <PatternInput
+          id="endsWithInput"
+          label="Ends with"
+          value={inputString}
+          onChange={setInputString}
+          placeholder="Enter pattern (ends with...)"
+        />
       </div>
 
-      <div className="min-h-screen bg-gray-100 p-6 border border-gray-300">
-        <div
-          ref={containerRef}
-          className="h-[500px] w-full border border-gray-300 rounded"
-        ></div>
-      </div>
+      <div
+        ref={containerRef}
+        className="h-[62%] w-full border border-gray-300 rounded mt-4"
+      ></div>
     </>
   );
 };

@@ -1,5 +1,7 @@
+// StartsWithPage.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { Network } from "vis-network/standalone";
+import PatternInput from "./PatternInput"; // adjust the import path as needed
 
 const StartsWithPage = () => {
   const containerRef = useRef(null);
@@ -61,26 +63,21 @@ const StartsWithPage = () => {
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold text-center mb-6">
-          DFA Visualizer: Ends With
+        <h1 className="text-xl md:text-3xl font-bold text-center mb-6">
+          DFA Visualizer: Starts With
         </h1>
-        <div className="flex items-center space-x-4 border border-gray-300">
-          <label htmlFor="startWithInput" className="whitespace-nowrap ml-4">
-            Starts with
-          </label>
-          <input
-            type="text"
-            value={inputString}
-            onChange={(e) => setInputString(e.target.value)}
-            placeholder="Enter pattern (e.g., 101)"
-            className="w-full px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <PatternInput
+          id="startWithInput"
+          label="Starts with"
+          value={inputString}
+          onChange={setInputString}
+          placeholder="Enter pattern (e.g., 101)"
+        />
       </div>
 
       <div
         ref={containerRef}
-        className="h-[500px] w-full border border-gray-300 rounded"
+        className="h-[62%] w-full border border-gray-300 rounded mt-4"
       ></div>
     </>
   );

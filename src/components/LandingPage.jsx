@@ -13,7 +13,7 @@ const LandingPage = () => {
             Design, simulate, and validate your deterministic finite automata effortlessly.
           </p>
           <button 
-            onClick={() => navigate('/app')}
+            onClick={() => navigate('/app/starts-with')}
             className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition"
           >
             Get Started
@@ -72,7 +72,7 @@ const LandingPage = () => {
             Begin exploring your DFA projects with our interactive, user-friendly simulator!
           </p>
           <button 
-            onClick={() => navigate('/app')}
+            onClick={() => navigate('/app/starts-with')}
             className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition"
           >
             Explore Now
