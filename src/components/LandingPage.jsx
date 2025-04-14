@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -8,12 +8,18 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-4">DFA Playground</h1>
+          <h1 className="text-5xl font-bold mb-4">
+            DFA Playground{" "}
+            <span className="text-sm border border-2 rounded-sm text-green-500 uppercase ml-2">
+              Beta
+            </span>
+          </h1>
           <p className="text-xl mb-8">
-            Design, simulate, and validate your deterministic finite automata effortlessly.
+            Design, simulate, and validate your deterministic finite automata
+            effortlessly.
           </p>
-          <button 
-            onClick={() => navigate('/app/starts-with')}
+          <button
+            onClick={() => navigate("/app/starts-with")}
             className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition"
           >
             Get Started
@@ -24,9 +30,15 @@ const LandingPage = () => {
       {/* About Section */}
       <section className="py-16">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-4">What is DFA Playground?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">
+            What is DFA Playground?
+          </h2>
           <p className="text-center text-gray-700 max-w-2xl mx-auto">
-            DFA Playground is an interactive DFA simulator that converts a string into a deterministic finite automaton, automatically generates its transition tables, and lets you test input strings to determine if they're accepted by the DFA. Perfect for students, educators, or professionals working with automata theory.
+            DFA Playground is an interactive DFA simulator that converts a
+            string into a deterministic finite automaton, automatically
+            generates its transition tables, and lets you test input strings to
+            determine if they're accepted by the DFA. Perfect for students,
+            educators, or professionals working with automata theory.
           </p>
         </div>
       </section>
@@ -38,25 +50,41 @@ const LandingPage = () => {
           <div className="flex flex-wrap -mx-4">
             <div className="w-full md:w-1/3 px-4 mb-8">
               <div className="bg-white shadow-lg rounded-lg p-6 h-full">
-                <h3 className="text-2xl font-semibold mb-2">Interactive Simulation</h3>
+                <h3 className="text-2xl font-semibold mb-2">
+                  Interactive Simulation
+                </h3>
                 <p className="text-gray-600">
-                  Visualize each state and transition in real time as your DFA processes input strings.
+                  Visualize each state and transition in real time as your DFA
+                  processes input strings.
                 </p>
               </div>
             </div>
             <div className="w-full md:w-1/3 px-4 mb-8">
-              <div className="bg-white shadow-lg rounded-lg p-6 h-full">
-                <h3 className="text-2xl font-semibold mb-2">Automated Table Generation</h3>
+              <div className="bg-white shadow-lg rounded-lg p-6 h-full relative">
+                <h3 className="text-2xl font-semibold mb-2 flex items-center">
+                  Automated Table Generation
+                  <span className="ml-2 px-2 py-1 text-xs font-semibold uppercase border border-gray-500 rounded bg-transparent text-gray-500">
+                    Upcoming
+                  </span>
+                </h3>
                 <p className="text-gray-600">
-                  Let the system automatically generate detailed transition tables based on your input.
+                  Let the system automatically generate detailed transition
+                  tables based on your input.
                 </p>
               </div>
             </div>
+
             <div className="w-full md:w-1/3 px-4 mb-8">
-              <div className="bg-white shadow-lg rounded-lg p-6 h-full">
-                <h3 className="text-2xl font-semibold mb-2">String Tester</h3>
+              <div className="bg-white shadow-lg rounded-lg p-6 h-full relative">
+                <h3 className="text-2xl font-semibold mb-2 flex items-center">
+                  String Tester
+                  <span className="ml-2 px-2 py-1 text-xs font-semibold uppercase border border-gray-500 rounded bg-transparent text-gray-500">
+                    Upcoming
+                  </span>
+                </h3>
                 <p className="text-gray-600">
-                  Enter custom strings to test whether they are accepted by your defined DFA.
+                  Enter custom strings to test whether they are accepted by your
+                  defined DFA.
                 </p>
               </div>
             </div>
@@ -69,10 +97,11 @@ const LandingPage = () => {
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="mb-8">
-            Begin exploring your DFA projects with our interactive, user-friendly simulator!
+            Begin exploring your DFA projects with our interactive,
+            user-friendly simulator!
           </p>
-          <button 
-            onClick={() => navigate('/app/starts-with')}
+          <button
+            onClick={() => navigate("/app/starts-with")}
             className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition"
           >
             Explore Now
@@ -83,7 +112,9 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-gray-800 text-gray-400 py-6">
         <div className="container mx-auto px-6 text-center">
-          <p>© {new Date().getFullYear()} DFA Playground. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} DFA Playground. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>

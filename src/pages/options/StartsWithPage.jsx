@@ -10,7 +10,9 @@ const StartsWithPage = () => {
   const generateDFA = (pattern) => {
     const nodes = [];
     const edges = [];
-
+  
+    const alphabet = pattern.includes("a") || pattern.includes("b") ? ["a", "b"] : ["0", "1"];
+  
     // Create states
     for (let i = 0; i <= pattern.length; i++) {
       nodes.push({
@@ -19,28 +21,30 @@ const StartsWithPage = () => {
         color: i === pattern.length ? "lightgreen" : "lightblue",
       });
     }
-
+  
     // Create transitions
     for (let i = 0; i < pattern.length; i++) {
       edges.push({ from: i, to: i + 1, label: pattern[i] });
     }
-
-    // Self-loop on final state
-    edges.push({ from: pattern.length, to: pattern.length, label: "0,1" });
-
-    // Loopback for invalid cases (trap state qX)
+  
+    // Self-loop on final state for all valid inputs
+    edges.push({ from: pattern.length, to: pattern.length, label: alphabet.join(",") });
+  
+    // Trap State for invalid transitions
     nodes.push({ id: "X", label: "qX", color: "lightcoral" });
+  
     for (let i = 0; i < pattern.length; i++) {
-      ["0", "1"].forEach((char) => {
+      alphabet.forEach((char) => {
         if (char !== pattern[i]) {
           edges.push({ from: i, to: "X", label: char });
         }
       });
     }
-    edges.push({ from: "X", to: "X", label: "0,1" }); // Self-loop on trap state
-
+    edges.push({ from: "X", to: "X", label: alphabet.join(",") });
+  
     return { nodes, edges };
   };
+  
 
   useEffect(() => {
     const { nodes, edges } = generateDFA(inputString);

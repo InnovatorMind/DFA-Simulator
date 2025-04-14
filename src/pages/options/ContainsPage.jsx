@@ -39,43 +39,48 @@ const ContainsPage = () => {
 
   // Generate a DFA for "contains/substring" matching using the computed prefix table
   const generateDFA = (pattern) => {
+    if (!pattern) return { nodes: [], edges: [] };
+  
+    // Detect whether input is binary or alphabetic
+    const isBinary = /^[01]+$/.test(pattern);
+    const isAlpha = /^[ab]+$/.test(pattern);
+  
+    if (!isBinary && !isAlpha) {
+      return { nodes: [], edges: [] }; // Invalid input, return empty DFA
+    }
+  
+    const alphabet = isBinary ? ["0", "1"] : ["a", "b"];
     const nodes = [];
     const edges = [];
     const m = pattern.length;
-
-    // Create nodes for states q0 ... qm
+  
+    // Create states for DFA
     for (let i = 0; i <= m; i++) {
       nodes.push({
         id: i,
         label: `q${i}`,
-        color: i === m ? "lightgreen" : "lightblue", // Accepting (substring found) state colored differently
+        color: i === m ? "lightgreen" : "lightblue",
       });
     }
-
-    // Only process transitions if pattern is not empty
+  
+    // Process substring transitions only if pattern exists
     if (pattern) {
       const prefix = computePrefix(pattern);
-      const alphabet = ["0", "1"]; // Adjust the alphabet if needed
-      for (let i = 0; i <= m; i++) {
-        alphabet.forEach((char) => {
-          let next;
-          if (i === m) {
-            // Once the substring is found, continue to stay in the accepting state
-            next = m;
-          } else {
-            next = getNextState(i, char, pattern, prefix);
-          }
+      alphabet.forEach((char) => {
+        for (let i = 0; i <= m; i++) {
+          let nextState = i === m ? m : getNextState(i, char, pattern, prefix);
           edges.push({
             from: i,
-            to: next,
+            to: nextState,
             label: char,
           });
-        });
-      }
+        }
+      });
     }
-
+  
     return { nodes, edges };
   };
+  
 
   useEffect(() => {
     const { nodes, edges } = generateDFA(inputString);

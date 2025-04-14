@@ -15,7 +15,7 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="font-serif flex h-screen">
+    <div className="flex h-screen">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 

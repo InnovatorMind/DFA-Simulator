@@ -8,10 +8,21 @@ const EndsWithPage = () => {
   const [inputString, setInputString] = useState("");
 
   const generateDFA = (pattern) => {
+    if (!pattern) return { nodes: [], edges: [] };
+  
+    // Detect if input is binary or alphabetic
+    const isBinary = /^[01]+$/.test(pattern);
+    const isAlpha = /^[ab]+$/.test(pattern);
+  
+    if (!isBinary && !isAlpha) {
+      return { nodes: [], edges: [] }; // Invalid input, return empty DFA
+    }
+  
+    const alphabet = isBinary ? ["0", "1"] : ["a", "b"];
     const nodes = [];
     const edges = [];
-
-    // Create states for the pattern
+  
+    // Create DFA states
     for (let i = 0; i <= pattern.length; i++) {
       nodes.push({
         id: i,
@@ -19,24 +30,26 @@ const EndsWithPage = () => {
         color: i === pattern.length ? "lightgreen" : "lightblue",
       });
     }
-
+  
     // Transition logic for "ends with"
     for (let i = 0; i <= pattern.length; i++) {
       const currentPrefix = pattern.slice(0, i);
-      ["0", "1"].forEach((char) => {
+      alphabet.forEach((char) => {
         const nextPrefix = currentPrefix + char;
-        // Determine the longest suffix of nextPrefix that is also a prefix of pattern
+  
         let k = Math.min(nextPrefix.length, pattern.length);
         while (k > 0 && nextPrefix.slice(-k) !== pattern.slice(0, k)) {
           k--;
         }
+  
         const toState = k;
         edges.push({ from: i, to: toState, label: char });
       });
     }
-
+  
     return { nodes, edges };
   };
+  
 
   useEffect(() => {
     const { nodes, edges } = generateDFA(inputString);
@@ -67,7 +80,7 @@ const EndsWithPage = () => {
           label="Ends with"
           value={inputString}
           onChange={setInputString}
-          placeholder="Enter pattern (ends with...)"
+          placeholder="Enter pattern (e.g., 101)"
         />
       </div>
 
