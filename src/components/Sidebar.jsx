@@ -1,52 +1,28 @@
-// Sidebar.jsx
-import { Link } from 'react-router-dom';
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ stringOptions, selectedOption, onOptionSelect }) => {
   return (
-    <aside
-      className={`bg-gray-800 text-white p-6 fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out 
-      ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 w-64 z-40`}
-    >
-      <h2 className="text-2xl font-bold mt-6 mb-6">String Options</h2>
-      <ul className="space-y-4">
-        <li>
-          <Link
-            to="/app/starts-with"
-            onClick={toggleSidebar} // closes sidebar on mobile
-            className="hover:text-gray-300 transition-colors"
-          >
-            Starts With...
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/app/ends-with"
-            onClick={toggleSidebar}
-            className="hover:text-gray-300 transition-colors"
-          >
-            Ends With...
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/app/contains"
-            onClick={toggleSidebar}
-            className="hover:text-gray-300 transition-colors"
-          >
-            Contains...
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/app/even-odd"
-            onClick={toggleSidebar}
-            className="hover:text-gray-300 transition-colors"
-          >
-            EvenOdd
-          </Link>
-        </li>
-      </ul>
-    </aside>
+    <div className="hidden md:block w-64 bg-slate-700 text-white p-4">
+      <h2 className="text-xl font-bold mb-6">String Options</h2>
+      <div className="space-y-2">
+        {stringOptions.map((option) => {
+          const IconComponent = option.icon;
+          return (
+            <button
+              key={option.id}
+              onClick={() => onOptionSelect(option.label)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                selectedOption === option.label
+                  ? 'bg-slate-600 text-white'
+                  : 'text-gray-300 hover:bg-slate-600 hover:text-white'
+              }`}
+            >
+              <IconComponent size={20} />
+              <span>{option.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
