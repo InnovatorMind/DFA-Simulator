@@ -1,26 +1,22 @@
 // EndsWith.jsx
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Network } from "vis-network/standalone";
 
 const EndsWith = ({ pattern = "" }) => {
   const containerRef = useRef(null);
   const networkRef = useRef(null);
 
-  /* ------------------------------------------------------------ *
-   * DFA Generator for "Ends With"
-   * ------------------------------------------------------------ */
+  /* ---------------------------------------------------------- *
+   * DFA generator – accepts either a/b or 0/1 patterns
+   * ---------------------------------------------------------- */
   const generateDFA = (pat) => {
     if (!pat) return { nodes: [], edges: [] };
 
-    const isBinary = /^[01]+$/.test(pat);
-    const isAlpha = /^[ab]+$/.test(pat);
-    if (!isBinary && !isAlpha) return { nodes: [], edges: [] };
-
-    const alphabet = isBinary ? ["0", "1"] : ["a", "b"];
+    const alphabet = /^[01]+$/.test(pat) ? ["0", "1"] : ["a", "b"];
     const nodes = [];
     const edges = [];
 
-    // Create DFA states
+    // ---------- states ----------
     for (let i = 0; i <= pat.length; i++) {
       nodes.push({
         id: i,
@@ -29,27 +25,32 @@ const EndsWith = ({ pattern = "" }) => {
       });
     }
 
-    // Transition logic for "ends with"
+    /* ---------- transitions ----------
+     *
+     * Classic “Knuth–Morris–Pratt” style construction:
+     * from every prefix state i, try every symbol,
+     * then fall back to the longest suffix of (prefix+symbol)
+     * that is also a prefix of the pattern.
+     */
     for (let i = 0; i <= pat.length; i++) {
-      const currentPrefix = pat.slice(0, i);
-      alphabet.forEach((char) => {
-        const nextPrefix = currentPrefix + char;
+      alphabet.forEach((ch) => {
+        const next = pat.slice(0, i) + ch;
 
-        let k = Math.min(nextPrefix.length, pat.length);
-        while (k > 0 && nextPrefix.slice(-k) !== pat.slice(-k)) {
-          k--;
-        }
+        // length of the longest proper suffix of `next`
+        // that matches a prefix of `pat`
+        let k = Math.min(next.length, pat.length);
+        while (k > 0 && next.slice(-k) !== pat.slice(0, k)) k--;
 
-        edges.push({ from: i, to: k, label: char });
+        edges.push({ from: i, to: k, label: ch });
       });
     }
 
     return { nodes, edges };
   };
 
-  /* ------------------------------------------------------------ *
-   * (Re)Draw the Graph Whenever Pattern Changes
-   * ------------------------------------------------------------ */
+  /* ---------------------------------------------------------- *
+   * Draw / redraw when pattern changes
+   * ---------------------------------------------------------- */
   useEffect(() => {
     if (networkRef.current) networkRef.current.destroy();
     if (!pattern) return;
@@ -63,19 +64,15 @@ const EndsWith = ({ pattern = "" }) => {
 
     networkRef.current = new Network(containerRef.current, data, options);
 
-    return () => networkRef.current.destroy();
+    return () => networkRef.current && networkRef.current.destroy();
   }, [pattern]);
 
-  /* ------------------------------------------------------------ *
-   * Render
-   * ------------------------------------------------------------ */
+  /* ---------------------------------------------------------- */
   return (
-    <>
-      <div
-        ref={containerRef}
-        className="h-[99%] w-[98%] border border-gray-300 rounded mt-4"
-      />
-    </>
+    <div
+      ref={containerRef}
+      className="h-[99%] w-[98%] border border-gray-300 rounded mt-4"
+    />
   );
 };
 
