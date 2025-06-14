@@ -27,10 +27,6 @@ export const useDFAVisualizer = (stringOptions, defaultOption = 'Starts With') =
     // console.log(pattern);
   };
 
-  const handleVisualize = () => {
-    console.log(`Visualizing: ${selectedOption} with pattern: ${pattern}`);
-    // Add your visualization logic here
-  };
 
   return {
     selectedOption,
@@ -40,6 +36,5 @@ export const useDFAVisualizer = (stringOptions, defaultOption = 'Starts With') =
     handleOptionSelect,
     handleToggleDropdown,
     handlePatternChange,
-    handleVisualize
   };
 };
