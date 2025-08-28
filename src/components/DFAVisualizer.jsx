@@ -15,18 +15,19 @@ const DFAVisualizer = () => {
     handleOptionSelect,
     handleToggleDropdown,
     handlePatternChange,
+    handleVisualize
   } = useDFAVisualizer(STRING_OPTIONS);
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
-      <Sidebar 
+      <Sidebar
         stringOptions={STRING_OPTIONS}
         selectedOption={selectedOption}
         onOptionSelect={handleOptionSelect}
       />
 
       <div className="flex-1 p-4 md:p-8 bg-gray-200 overflow-y-auto">
-        <MobileDropdown 
+        <MobileDropdown
           stringOptions={STRING_OPTIONS}
           selectedOption={selectedOption}
           selectedOptionData={selectedOptionData}
@@ -35,17 +36,19 @@ const DFAVisualizer = () => {
           onOptionSelect={handleOptionSelect}
         />
 
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-8">
+        <h1 className="hidden md:block text-3xl font-bold text-gray-800 mb-8">
           DFA Visualizer: {selectedOption}
         </h1>
 
-        <InputSection 
+
+        <InputSection
           selectedOption={selectedOption}
           pattern={pattern}
           onPatternChange={handlePatternChange}
+          onVisualize={handleVisualize}
         />
 
-        <VisualizationArea 
+        <VisualizationArea
           pattern={pattern}
           selectedOption={selectedOption}
         />
