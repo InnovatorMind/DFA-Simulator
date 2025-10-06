@@ -5,6 +5,7 @@ import { startsWith } from "./type/StartsWith.js"
 import { EndsWith } from "./type/EndsWith.js";
 import { Contains } from "./type/Contains.js";
 import { addStartAndFinalNodes } from './type/utils.js';
+import { createNodesWithDeadState } from "../hooks/useDFAVisualizer.js"
 
 const VisualizationArea = ({ selectedOption, pattern }) => {
   const containerRef = useRef(null);
@@ -18,46 +19,13 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
 
     if (!containerRef.current) return;
 
-    const totalNodes = text.length + 1;
-    const nodeQueue = [];
-
-    for (let i = 0; i < totalNodes; i++) {
-      nodeQueue.push({
-        id: i,
-        label: `q${i}`,
-        x: i * 120,
-        y: 0,
-        fixed: true,
-        color: {
-          background: "#FFCDD2",
-          border: "#B71C1C",
-        },
-        size: 15,
-      });
-    }
-
-    // Dead state node (for Starts With) ab
-    if (type === "Starts With") {
-      const centerX = ((totalNodes - 1) * 120) / 2;
-      const deadNode = {
-        id: "dead",
-        label: "qX",
-        x: centerX,
-        y: 150,
-        fixed: { x: true, y: false }, // only vertical movement
-        color: {
-          background: "#E0E0E0",
-          border: "#424242",
-        },
-        size: 15,
-      };
-      nodeQueue.push(deadNode);
-    }
-
     const nodes = new DataSet();
     const edges = new DataSet();
+    
+    // create nodes for each and dead node for start with dfa
+    const nodeQueue = createNodesWithDeadState(text, type);
 
-    nodes.add(nodeQueue); // ✅ actually add nodes
+    nodes.add(nodeQueue); // actually add nodes
 
     const data = { nodes, edges };
     const options = {
@@ -168,7 +136,7 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
   // ✅ run only when pattern or option changes
   useEffect(() => {
     startAnimation();
-  }, [pattern, selectedOption]);
+  });
 
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">

@@ -1,4 +1,3 @@
-// components/MobileDropdown.jsx
 import { ChevronDown } from 'lucide-react';
 
 const MobileDropdown = ({ 

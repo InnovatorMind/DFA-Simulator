@@ -1,10 +1,18 @@
+import { useState } from "react";
 
-const InputSection = ({ selectedOption, pattern, onPatternChange, onVisualize }) => {
+const InputSection = ({ selectedOption, pattern, onPatternChange }) => {
+  const [localInput, setLocalInput] = useState(pattern || ""); 
+
   const handleInputChange = (e) => {
     const input = e.target.value;
-    
+    setLocalInput(input); 
+  };
+
+  const handleVisualizeClick = () => {
+    const input = localInput;
+
     if (input === "") {
-      onPatternChange(""); // Explicitly reset state
+      onPatternChange(""); 
       return;
     }
 
@@ -13,6 +21,8 @@ const InputSection = ({ selectedOption, pattern, onPatternChange, onVisualize })
 
     if (isBinary || isAlpha) {
       onPatternChange(input);
+    } else {
+      alert("Invalid pattern! Only binary (0,1) or alphabet (a,b) allowed.");
     }
   };
 
@@ -25,14 +35,14 @@ const InputSection = ({ selectedOption, pattern, onPatternChange, onVisualize })
           </label>
           <input
             type="text"
-            value={pattern}
+            value={localInput} 
             onChange={handleInputChange}
             placeholder="Enter pattern (e.g., 101 or ab)"
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
         <button
-          onClick={onVisualize}
+          onClick={handleVisualizeClick} 
           className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
         >
           Visualize

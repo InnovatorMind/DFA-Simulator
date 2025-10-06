@@ -15,7 +15,6 @@ const DFAVisualizer = () => {
     handleOptionSelect,
     handleToggleDropdown,
     handlePatternChange,
-    handleVisualize
   } = useDFAVisualizer(STRING_OPTIONS);
 
   return (
@@ -45,7 +44,6 @@ const DFAVisualizer = () => {
           selectedOption={selectedOption}
           pattern={pattern}
           onPatternChange={handlePatternChange}
-          onVisualize={handleVisualize}
         />
 
         <VisualizationArea
