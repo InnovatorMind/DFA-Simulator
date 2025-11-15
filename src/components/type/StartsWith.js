@@ -1,4 +1,5 @@
 // animateDeadEdges.js
+import { addLog } from '../logger.js';
 
 export function startsWith(edges) {
   let deadEdgeIndex = 0;
@@ -19,7 +20,8 @@ export function startsWith(edges) {
       });
 
       deadEdgeIndex++;
-      setTimeout(() => animateDeadEdges(str), 500);
+      addLog(`Added dead edge for '${altChar}' from q${from} to qX`);
+      setTimeout(() => animateDeadEdges(str), 1000);
     }
   }
 

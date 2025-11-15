@@ -1,11 +1,12 @@
 import { useRef, useEffect } from "react";
 import { Network } from "vis-network/standalone";
 import { DataSet } from "vis-data";
-import { startsWith } from "./type/StartsWith.js"
+import { startsWith } from "./type/StartsWith.js";
 import { EndsWith } from "./type/EndsWith.js";
 import { Contains } from "./type/Contains.js";
-import { addStartAndFinalNodes } from './type/utils.js';
-import { createNodesWithDeadState } from "../hooks/useDFAVisualizer.js"
+import { addStartAndFinalNodes } from "./type/utils.js";
+import { createNodesWithDeadState } from "../hooks/useDFAVisualizer.js";
+import { addLog, resetLogs } from "./logger";
 
 const VisualizationArea = ({ selectedOption, pattern }) => {
   const containerRef = useRef(null);
@@ -19,13 +20,23 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
 
     if (!containerRef.current) return;
 
+    // cleanup previous graph
+    if (networkRef.current) {
+      networkRef.current.destroy();
+    }
+
     const nodes = new DataSet();
     const edges = new DataSet();
-    
-    // create nodes for each and dead node for start with dfa
-    const nodeQueue = createNodesWithDeadState(text, type);
 
-    nodes.add(nodeQueue); // actually add nodes
+    resetLogs();
+    addLog(`Starting DFA animation for pattern: ${text}`);
+    addLog(`Number of states to create(stringLenght + 1): ${text.length + 1}`);
+
+    // ---------------------------
+
+    // create nodes + dead state
+    const nodeQueue = createNodesWithDeadState(text, type);
+    nodes.add(nodeQueue);
 
     const data = { nodes, edges };
     const options = {
@@ -46,16 +57,16 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
     };
 
     const network = new Network(containerRef.current, data, options);
-    networkRef.current = network;
+
     nodesRef.current = nodes;
     edgesRef.current = edges;
+    networkRef.current = network;
 
-    // let nodeIndex = 0;
-    function animateNodes() {
-      animateMainEdges(text);
-    }
-
+    // ---------------------------
+    //   MAIN EDGE ANIMATION
+    // ---------------------------
     let mainEdgeIndex = 0;
+
     function animateMainEdges(str) {
       if (mainEdgeIndex < str.length) {
         const from = mainEdgeIndex;
@@ -63,23 +74,31 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
         const char = str[mainEdgeIndex];
 
         edges.add({
+          id: `main-${from}-${to}-${char}`,
           from,
           to,
           label: char,
           color: { color: "#4A148C" },
-          arrows: "to"
+          arrows: "to",
         });
 
         mainEdgeIndex++;
-        setTimeout(() => animateMainEdges(str), 500);
-      } else if (type === "Starts With") {
+        addLog(`Added edge for '${char}' from q${from} to q${to}`);
+        setTimeout(() => animateMainEdges(str), 1000);
+      } else {
+        // After main edges, animate special edges
+        handleSpecialEdges(str);
+      }
+    }
+
+    function handleSpecialEdges(str) {
+      if (type === "Starts With") {
         const animateDeadEdges = startsWith(edges);
         animateDeadEdges(str);
         addStartAndFinalNodes(network, nodes, edges, str.length);
       } else if (type === "Ends With") {
         const animateEndsWith = EndsWith();
         const { edges: newEdges } = animateEndsWith(str);
-        console.log(newEdges);
 
         newEdges.forEach((e, index) => {
           setTimeout(() => {
@@ -90,24 +109,20 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
               label: e.label,
               arrows: "to",
               smooth: { type: "curvedCW", roundness: 0.4 },
-              font: { color: "#000000", size: 16, align: "horizontal" },
             });
 
-            // When the last edge is drawn, add the special nodes
+            addLog(`Added edge for '${e.label}' from q${e.from} to q${e.to}`);
             if (index === newEdges.length - 1) {
               addStartAndFinalNodes(network, nodes, edges, str.length);
+              addLog(`Completed adding all 'Ends With' edges.`);
             }
-
           }, index * 1000);
         });
-
       } else if (type === "Contains") {
         const animateContains = Contains(edges);
         const { edges: newEdges } = animateContains(str);
-        console.log(newEdges);
 
         newEdges.forEach((e, index) => {
-          console.log("-> ", e.label);
           setTimeout(() => {
             edges.add({
               from: e.from,
@@ -115,36 +130,39 @@ const VisualizationArea = ({ selectedOption, pattern }) => {
               label: e.label,
               arrows: "to",
               smooth: { type: "curvedCW", roundness: 0.4 },
-              font: { color: "#000000", size: 16, align: "horizontal" },
             });
 
+            addLog(`Added edge for '${e.label}' from q${e.from} to q${e.to}`);
             if (index === newEdges.length - 1) {
               addStartAndFinalNodes(network, nodes, edges, str.length);
+              addLog(`Completed adding all 'Contains' edges.`);
             }
           }, index * 1000);
         });
       }
     }
 
-    // ✅ Kick off animation
-    animateNodes();
-    // console.log("Pattern text:", text);
-    // console.log("Selected type:", type);
-    // console.log("InputData:", inputData);
+    // Wait 1 sec before starting edge animation
+    setTimeout(() => {
+      addLog(`Connect the sates same way as pattern: ${text}`);
+      animateMainEdges(text);
+    }, 2000);
   }
 
-  // ✅ run only when pattern or option changes
+  // RUN when pattern or option changes
   useEffect(() => {
+    if (!pattern) return;
     startAnimation();
-  });
+  }, [pattern, selectedOption]);
 
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-      <div className="w-full h-[400px] relative flex items-center justify-center" ref={containerRef}>
-      </div>
+      <div
+        className="w-full h-[400px] relative flex items-center justify-center"
+        ref={containerRef}
+      ></div>
     </div>
   );
 };
 
 export default VisualizationArea;
-

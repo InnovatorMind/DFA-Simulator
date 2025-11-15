@@ -27,7 +27,7 @@ const InputSection = ({ selectedOption, pattern, onPatternChange }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+    <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex items-center gap-4 flex-1">
           <label className="text-gray-700 font-medium whitespace-nowrap">

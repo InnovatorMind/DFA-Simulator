@@ -43,7 +43,6 @@ export function createNodesWithDeadState(text, type) {
   const totalNodes = text.length + 1;
   const nodeQueue = [];
 
-  // Create main nodes
   for (let i = 0; i < totalNodes; i++) {
     nodeQueue.push({
       id: i,
@@ -59,22 +58,19 @@ export function createNodesWithDeadState(text, type) {
     });
   }
 
-  // Add dead state node if type is "Starts With"
   if (type === "Starts With") {
-    const centerX = ((totalNodes - 1) * 120) / 2;
-    const deadNode = {
+    nodeQueue.push({
       id: "dead",
       label: "qX",
-      x: centerX,
+      x: ((totalNodes - 1) * 120) / 2,
       y: 150,
-      fixed: { x: true, y: false }, // only vertical movement
+      fixed: { x: true, y: false },
       color: {
         background: "#E0E0E0",
         border: "#424242",
       },
       size: 15,
-    };
-    nodeQueue.push(deadNode);
+    });
   }
 
   return nodeQueue;

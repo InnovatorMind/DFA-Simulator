@@ -5,6 +5,7 @@ import InputSection from './InputSection';
 import VisualizationArea from './VisualizationArea';
 import { useDFAVisualizer } from '../hooks/useDFAVisualizer';
 import { STRING_OPTIONS } from '../constants/stringOptions';
+import StateLogger from './StateLogger';
 
 const DFAVisualizer = () => {
   const {
@@ -35,7 +36,7 @@ const DFAVisualizer = () => {
           onOptionSelect={handleOptionSelect}
         />
 
-        <h1 className="hidden md:block text-3xl font-bold text-gray-800 mb-8">
+        <h1 className="hidden md:block text-2xl font-bold text-gray-800 mb-8">
           DFA Visualizer: {selectedOption}
         </h1>
 
@@ -45,6 +46,8 @@ const DFAVisualizer = () => {
           pattern={pattern}
           onPatternChange={handlePatternChange}
         />
+
+        <StateLogger  />
 
         <VisualizationArea
           pattern={pattern}
